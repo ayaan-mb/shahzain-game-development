@@ -96,12 +96,56 @@ class PlayerController {
 class CarController {
   constructor(scene) {
     this.group = new THREE.Group();
-    const shell = new THREE.Mesh(new THREE.BoxGeometry(3.8, 0.9, 1.8), new THREE.MeshStandardMaterial({ color: 0x61d0ff }));
-    shell.position.y = 0.9;
-    const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.7, 1.5), new THREE.MeshStandardMaterial({ color: 0x12263f }));
-    cabin.position.set(0.1, 1.45, 0);
-    this.group.add(shell, cabin);
-    [-1.2,1.2].forEach(x=>[-0.95,0.95].forEach(z=>{const w=new THREE.Mesh(new THREE.CylinderGeometry(0.38,0.38,0.35,16),new THREE.MeshStandardMaterial({color:0x202020}));w.rotation.z=Math.PI/2;w.position.set(x,0.45,z);this.group.add(w);}));
+
+    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x4dc7ff, roughness: 0.36, metalness: 0.28 });
+    const trimMat = new THREE.MeshStandardMaterial({ color: 0x12263f, roughness: 0.3, metalness: 0.5 });
+
+    const underBody = new THREE.Mesh(new THREE.BoxGeometry(1.95, 0.35, 4.2), bodyMat);
+    underBody.position.y = 0.48;
+
+    const midBody = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.45, 2.6), bodyMat);
+    midBody.position.y = 0.83;
+
+    const hood = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.2, 1.15), bodyMat);
+    hood.position.set(0, 0.78, 1.62);
+    hood.rotation.x = -0.12;
+
+    const rearDeck = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.22, 0.9), bodyMat);
+    rearDeck.position.set(0, 0.82, -1.58);
+    rearDeck.rotation.x = 0.1;
+
+    const roof = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.38, 1.3), trimMat);
+    roof.position.set(0, 1.16, -0.05);
+
+    const windshield = new THREE.Mesh(new THREE.BoxGeometry(1.35, 0.28, 0.7), trimMat);
+    windshield.position.set(0, 1.01, 0.72);
+    windshield.rotation.x = -0.5;
+
+    const rearGlass = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.22, 0.55), trimMat);
+    rearGlass.position.set(0, 1.03, -0.86);
+    rearGlass.rotation.x = 0.4;
+
+    this.group.add(underBody, midBody, hood, rearDeck, roof, windshield, rearGlass);
+
+    const wheelMat = new THREE.MeshStandardMaterial({ color: 0x1d1d1d, roughness: 0.75, metalness: 0.15 });
+    const rimMat = new THREE.MeshStandardMaterial({ color: 0xb8c7d6, roughness: 0.35, metalness: 0.85 });
+    const wheelOffsets = [
+      [-0.98, 0.35, 1.3],
+      [0.98, 0.35, 1.3],
+      [-0.98, 0.35, -1.25],
+      [0.98, 0.35, -1.25],
+    ];
+    for (const [x, y, z] of wheelOffsets) {
+      const wheel = new THREE.Group();
+      const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.34, 18), wheelMat);
+      tire.rotation.z = Math.PI / 2;
+      const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.36, 12), rimMat);
+      rim.rotation.z = Math.PI / 2;
+      wheel.add(tire, rim);
+      wheel.position.set(x, y, z);
+      this.group.add(wheel);
+    }
+
     this.group.position.set(6, 0, 6); scene.add(this.group);
     this.velocity = 0;
   }
