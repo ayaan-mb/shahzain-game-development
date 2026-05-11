@@ -97,49 +97,57 @@ class CarController {
   constructor(scene) {
     this.group = new THREE.Group();
 
-    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x4dc7ff, roughness: 0.36, metalness: 0.28 });
-    const trimMat = new THREE.MeshStandardMaterial({ color: 0x12263f, roughness: 0.3, metalness: 0.5 });
+    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x4dc7ff, roughness: 0.34, metalness: 0.32 });
+    const glassMat = new THREE.MeshStandardMaterial({ color: 0x0f223c, roughness: 0.22, metalness: 0.55 });
+    const detailMat = new THREE.MeshStandardMaterial({ color: 0x15212d, roughness: 0.38, metalness: 0.45 });
 
-    const underBody = new THREE.Mesh(new THREE.BoxGeometry(1.95, 0.35, 4.2), bodyMat);
-    underBody.position.y = 0.48;
+    const floor = new THREE.Mesh(new THREE.BoxGeometry(1.95, 0.26, 4.35), bodyMat);
+    floor.position.y = 0.42;
 
-    const midBody = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.45, 2.6), bodyMat);
-    midBody.position.y = 0.83;
+    const center = new THREE.Mesh(new THREE.BoxGeometry(1.78, 0.38, 2.4), bodyMat);
+    center.position.y = 0.72;
 
-    const hood = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.2, 1.15), bodyMat);
-    hood.position.set(0, 0.78, 1.62);
-    hood.rotation.x = -0.12;
+    const hood = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.88, 1.25, 24), bodyMat);
+    hood.rotation.z = Math.PI / 2;
+    hood.scale.set(0.95, 0.4, 1.0);
+    hood.position.set(0, 0.68, 1.67);
 
-    const rearDeck = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.22, 0.9), bodyMat);
-    rearDeck.position.set(0, 0.82, -1.58);
-    rearDeck.rotation.x = 0.1;
+    const nose = new THREE.Mesh(new THREE.ConeGeometry(0.62, 0.82, 20), bodyMat);
+    nose.rotation.x = Math.PI / 2;
+    nose.scale.set(1.35, 0.55, 1.0);
+    nose.position.set(0, 0.61, 2.2);
 
-    const roof = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.38, 1.3), trimMat);
-    roof.position.set(0, 1.16, -0.05);
+    const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.86, 0.62, 0.9, 24), bodyMat);
+    tail.rotation.z = Math.PI / 2;
+    tail.scale.set(0.95, 0.45, 1.0);
+    tail.position.set(0, 0.7, -1.95);
 
-    const windshield = new THREE.Mesh(new THREE.BoxGeometry(1.35, 0.28, 0.7), trimMat);
-    windshield.position.set(0, 1.01, 0.72);
-    windshield.rotation.x = -0.5;
+    const roof = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.55, 1.55, 24), glassMat);
+    roof.rotation.z = Math.PI / 2;
+    roof.scale.set(0.98, 0.52, 1.0);
+    roof.position.set(0, 1.1, -0.1);
 
-    const rearGlass = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.22, 0.55), trimMat);
-    rearGlass.position.set(0, 1.03, -0.86);
-    rearGlass.rotation.x = 0.4;
+    const splitter = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.09, 0.2), detailMat);
+    splitter.position.set(0, 0.33, 2.38);
 
-    this.group.add(underBody, midBody, hood, rearDeck, roof, windshield, rearGlass);
+    const diffuser = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.1, 0.26), detailMat);
+    diffuser.position.set(0, 0.35, -2.28);
 
-    const wheelMat = new THREE.MeshStandardMaterial({ color: 0x1d1d1d, roughness: 0.75, metalness: 0.15 });
-    const rimMat = new THREE.MeshStandardMaterial({ color: 0xb8c7d6, roughness: 0.35, metalness: 0.85 });
+    this.group.add(floor, center, hood, nose, tail, roof, splitter, diffuser);
+
+    const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.78, metalness: 0.12 });
+    const rimMat = new THREE.MeshStandardMaterial({ color: 0xc9d3de, roughness: 0.31, metalness: 0.9 });
     const wheelOffsets = [
-      [-0.98, 0.35, 1.3],
-      [0.98, 0.35, 1.3],
-      [-0.98, 0.35, -1.25],
-      [0.98, 0.35, -1.25],
+      [-0.98, 0.36, 1.34],
+      [0.98, 0.36, 1.34],
+      [-0.98, 0.36, -1.34],
+      [0.98, 0.36, -1.34],
     ];
     for (const [x, y, z] of wheelOffsets) {
       const wheel = new THREE.Group();
-      const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.34, 18), wheelMat);
+      const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.43, 0.43, 0.35, 20), wheelMat);
       tire.rotation.z = Math.PI / 2;
-      const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.36, 12), rimMat);
+      const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.36, 14), rimMat);
       rim.rotation.z = Math.PI / 2;
       wheel.add(tire, rim);
       wheel.position.set(x, y, z);
