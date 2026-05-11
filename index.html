@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Super Driving Racing</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="startMenu" class="overlay">
+      <div class="panel">
+        <h1>Super Driving Racing</h1>
+        <p>Original placeholder prototype (no copyrighted assets).</p>
+        <button id="startButton">Start Game</button>
+        <ul>
+          <li>WASD = Move / Drive</li>
+          <li>Shift = Run</li>
+          <li>E = Enter/Exit Car</li>
+          <li>Space = Handbrake (in car)</li>
+          <li>Mouse drag = Rotate camera</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="hud" class="hud hidden">
+      <div class="hud-row">
+        <span>Health: <strong id="healthValue">100</strong></span>
+        <span>Money: <strong id="moneyValue">$5000</strong></span>
+      </div>
+      <div id="missionText">Mission: Explore the city and test your car.</div>
+    </div>
+
+    <canvas id="game"></canvas>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
